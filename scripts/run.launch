@@ -1,0 +1,11 @@
+<launch>
+  <machine name="local_alt" address="localhost" default="true" env-loader="/opt/ros/kinetic/env.sh" />
+  <node name = "edge1" pkg = "consensus/scripts" type = "Edge" />
+  <node name = "cloud9" pkg = "consensus/scripts" type = "Cloud" />
+  <group name="robots">
+    <node name = "robot1" pkg = "consensus/scripts" type = "End" />
+    <node name = "robot2" pkg = "consensus/scripts" type = "End" />
+    <node name = "robot3" pkg = "consensus/scripts" type = "End" />
+    <node name = "robot4" pkg = "consensus/scripts" type = "End" />
+  </group>
+</launch>
