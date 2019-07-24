@@ -1,11 +1,13 @@
 <launch>
-  <machine name="local_alt" address="localhost" default="true" env-loader="/opt/ros/kinetic/env.sh" />
-  <node name = "edge1" pkg = "consensus/scripts" type = "Edge" />
-  <node name = "cloud9" pkg = "consensus/scripts" type = "Cloud" />
-  <group name="robots">
-    <node name = "robot1" pkg = "consensus/scripts" type = "End" />
-    <node name = "robot2" pkg = "consensus/scripts" type = "End" />
-    <node name = "robot3" pkg = "consensus/scripts" type = "End" />
-    <node name = "robot4" pkg = "consensus/scripts" type = "End" />
+  <!-- <machine name="local_alt" address="localhost" default="true" env-loader="/opt/ros/kinetic/env.sh" /> -->
+  <param name ="/use_sim_time" value="false"/>
+  <node name="edge1" pkg="Sensor_Dist_ROS" type="rosEdge.py" output="screen" />
+  <node name="cloud9" pkg="Sensor_Dist_ROS" type="rosCloud.py" output="screen" />
+  <node name="plotter1" pkg="Sensor_Dist_ROS" type="rosPlotter.py" output="screen" />
+  <group>
+    <node name="robot1" pkg="Sensor_Dist_ROS" type="rosEnd1.py" output="screen" />
+    <node name="robot2" pkg="Sensor_Dist_ROS" type="rosEnd2.py" output="screen" />
+    <node name="robot3" pkg="Sensor_Dist_ROS" type="rosEnd3.py" output="screen" />
+    <node name="robot4" pkg="Sensor_Dist_ROS" type="rosEnd4.py" output="screen" />
   </group>
 </launch>

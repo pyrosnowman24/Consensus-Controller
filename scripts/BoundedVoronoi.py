@@ -11,10 +11,9 @@ class BoundedVoronoi:
   def __init__(self,points,bounding_box):
     self.eps = sys.float_info.epsilon
     self.points = points
-    self.centroids = 0
+    self.centroids = None
     self.bounding_box = bounding_box
-    self.vor = self.voronoi(points, bounding_box)
-    rospy.init_node('Voronoi_Node')
+    self.vor = None
   def updateVoronoi(self,points,bounding_box = None):
     if bounding_box is None:
       bounding_box = self.bounding_box
@@ -93,8 +92,9 @@ class BoundedVoronoi:
       for region in self.vor.filtered_regions:
           vertices = self.vor.vertices[region + [region[0]], :]
           ax.plot(vertices[:, 0], vertices[:, 1], 'k-')
-      for centroid in self.centroids:
-          ax.plot(centroid[0],centroid[1],'bx')
+      if self.centroids is not None:
+          for centroid in self.centroids:
+              ax.plot(centroid[0],centroid[1],'bx')
 #       Compute and plot centroids
 #       centroids = []
 #       for region in self.vor.filtered_regions:
@@ -104,4 +104,4 @@ class BoundedVoronoi:
 #           ax.plot(centroid[:, 0], centroid[:, 1], 'r.')
       ax.set_xlim([-0.1, 1.1])
       ax.set_ylim([-0.1, 1.1])
-      plt.show()
+      # plt.show()

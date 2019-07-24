@@ -1,4 +1,6 @@
+#!/usr/bin/python
 import numpy as np
+import rospy
 import time
 from scipy.spatial import Voronoi, voronoi_plot_2d
 import sys
@@ -10,7 +12,7 @@ class End:
     self.pos = pos
     self.centroid = 0
     self.points = np.zeros((4,2))
-    self.p = 0
+    self.p = np.array([1,1,1])
     self.Sensor = Sensor
     self.startTime = startTime
     self.prevTime = startTime
@@ -33,7 +35,7 @@ class End:
   def updatePosition(self,centroid):
     control = self.K * np.subtract(centroid,self.pos)
     self.pos = self.pos + (time.time() - self.prevTime) * .5 * (self.prevControl+control)
-    self.prevTime = time.time()
+    self.prevTime = rospy.get_time()
     self.prevControl = control
 
   def computeCentroid(self):
@@ -50,8 +52,6 @@ class End:
         ymin = vertice[1]
       if(vertice[1]>ymax): # Tests for ymax
         ymax = vertice[1]
-    print "vertices",self.pointVertices()
-    print xmin,xmax,"and",ymin,ymax
     mass_moment = self.mass_moment(xmin,xmax,ymin,ymax)
     mass = mass_moment[0]
     self.currentMass = mass
