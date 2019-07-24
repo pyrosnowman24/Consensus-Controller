@@ -1,2 +1,2 @@
-# PhiLambdaArchitecture
-Ros Implementation of Phi-Lambda Architecture I'm testing
+# Consensus Controller
+Ros Implementation of consensus controller I'm testing
