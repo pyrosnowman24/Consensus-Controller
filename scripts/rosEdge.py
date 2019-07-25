@@ -12,17 +12,13 @@ global router
 router = Edge()
 
 def robot1Callback(data):
-    router.updateData([data.x,data.y,data.sensor])
-    router.positions[0,:] = [data.x,data.y]
+    router.data[0,:]=[data.x,data.y,data.sensor]
 def robot2Callback(data):
-    router.updateData([data.x,data.y,data.sensor])
-    router.positions[1,:] = [data.x,data.y]
+    router.data[1,:]=[data.x,data.y,data.sensor]
 def robot3Callback(data):
-    router.updateData([data.x,data.y,data.sensor])
-    router.positions[2,:] = [data.x,data.y]
+    router.data[2,:]=[data.x,data.y,data.sensor]
 def robot4Callback(data):
-    router.updateData([data.x,data.y,data.sensor])
-    router.positions[3,:] = [data.x,data.y]
+    router.data[3,:]=[data.x,data.y,data.sensor]
 
 def initialize():
     rospy.init_node('rosEdge', anonymous = True)

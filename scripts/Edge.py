@@ -6,28 +6,25 @@ from scipy import optimize
 
 class Edge:
   def __init__(self):
-    self.positions = np.zeros(([4,2]))
-    self.data = None
+    self.data = np.zeros(([4,3]))
     self.edgeP = np.array((1,1,1))
     self.p0 = np.array([1,1,1])
-  def gatherPositions(self,robots):
-    self.positions = np.zeros(len(robots))
-    for i,robot in enumerate(robots):
-      self.positions[i] = robot.pos
-  def linearApprox(self):
-    fitfunc = lambda p,x: p[0] + p[1]*x[:,0]+p[2]*x[:,1]
-    errfunc = lambda p,x,y: fitfunc(p,x)-y
-    if self.data is None:
-        return None
-    if isinstance(self.data,list): # Tests if data is a matrix or array, it has to be a matrix to be used
-      return None
-    if self.data.shape[0]<len(self.p0): # Tests if data has more points then variables in p, it must be higher
-      return None
 
-    p1,success = optimize.leastsq(errfunc,self.p0,args=(self.data[:,0:2],self.data[:,-1]))
-    self.edgeP = p1
-  def updateData(self,data):
-    if self.data is None:
-      self.data = data
-    else:
-      self.data = np.vstack((self.data,data))
+  def linearApprox(self):
+    for row in self.data:
+        if np.sum(row) == 0:
+            return None
+    xs = self.data[:,0]
+    ys = self.data[:,1]
+    zs = self.data[:,2]
+    tmp_A = []
+    tmp_b = []
+    for i in range(len(xs)):
+        tmp_A.append([xs[i], ys[i], 1])
+        tmp_b.append(zs[i])
+    b = np.matrix(tmp_b).T
+    A = np.matrix(tmp_A)
+    fit = (A.T * A).I * A.T * b
+    self.edgeP = [fit.item(0),fit.item(1),fit.item(2)]
+    print(self.data)
+    print(self.edgeP)
