@@ -32,9 +32,6 @@ def robot4Callback(data):
     global plotter
     plotter.updateData([data.x,data.y,data.sensor])
     plotter.points[3,:] = np.array(([data.x,data.y]))
-def pCallback(data):
-    global plotter
-    plotter.p = data.p
 
 def initialize():
     rospy.init_node('rosCloud', anonymous = True)
@@ -44,7 +41,6 @@ def initialize():
     rospy.Subscriber("/robot2/data",Data,robot2Callback,queue_size=1)
     rospy.Subscriber("/robot3/data",Data,robot3Callback,queue_size=1)
     rospy.Subscriber("/robot4/data",Data,robot4Callback,queue_size=1)
-    rospy.Subscriber("/cloud/p",floatArray,pCallback,queue_size=1)
 
     rate = rospy.Rate(5)
 

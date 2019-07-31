@@ -26,5 +26,3 @@ class Edge:
     A = np.matrix(tmp_A)
     fit = (A.T * A).I * A.T * b
     self.edgeP = [fit.item(0),fit.item(1),fit.item(2)]
-    print(self.data)
-    print(self.edgeP)

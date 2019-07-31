@@ -45,24 +45,21 @@ def initialize():
     rospy.Subscriber("/robot4/data",Data,robot4Callback,queue_size=1)
     # The published array of robot positions and the array of values for the model
     desiredPoses = rospy.Publisher("/cloud/poses",floatArray2,queue_size=1)
-    pPub = rospy.Publisher("/cloud/p",floatArray,queue_size=1)
     rate = rospy.Rate(5)
 
     while not rospy.is_shutdown():
         global points, count
-
-        BigC.updateModel()
         for point in points: # Tests if any of the robots positions hasent been recieved yet
             if point[0] == 0 or point[1] == 0:
                 print "~~~~~~~~~~~~PANIC~~~~~~~~~~~~~~~~"
                 rate.sleep()
-        if(BigC.equilibrium):
+        if(BigC.data is not None and len(BigC.data) >= 200):
+            BigC.updateModel()
             print count
             count = count + 1
             poses = BigC.findPositions(points).transpose()
             print "Publishing model",'\n'
             desiredPoses.publish(list(poses[0,:]),list(poses[1,:]))
-            pPub.publish(BigC.p)
         else:
             print "Publishing 0",'\n'
             desiredPoses.publish([float('nan')],[float('nan')])

@@ -9,26 +9,22 @@ class Sim:
   def __init__(self,BoundedVoronoi):
     self.points = None
     self.BoundedVoronoi = BoundedVoronoi
-    self.p = None
+    self.model = None
     self.temppoints = None
     self.newpoints = None
     self.pos = None
 
-  def update_all(self,points,p):
+  def update_all(self,points,model):
       self.points = points
       self.temppoints = points
       self.newpoints = points
-      self.p = p
+      self.model = model
 
   def getVertices(self,pos):
     return self.BoundedVoronoi.pointVertices(np.where((self.temppoints == pos).all(axis=1))[0][0])
 
   def sensorHat(self,pos): #Provides a sensor value at a (x,y) coordinate
-    sum = self.p[0] + self.p[1]*(pos[0]+self.p[2])**2+self.p[3]*(pos[1]+self.p[4])**2
-    # sum = self.p[0] + self.p[1]*pos[0]**3+self.p[2]*pos[1]**3
-    if sum == 0:
-        sum = np.array(.0001)
-    return sum
+    return self.model(pos[0],pos[1])
 
   def computeCentroid(self,vertices):
     xmin = 10000
@@ -69,7 +65,6 @@ class Sim:
   def run(self):
     self.temppoints = self.points
     self.BoundedVoronoi.updateVoronoi(self.temppoints)
-    print self.p
     count = 0
     while count < 20:
       for i,point in enumerate(self.temppoints):
@@ -79,5 +74,4 @@ class Sim:
       self.temppoints = self.newpoints
       self.BoundedVoronoi.updateVoronoi(self.temppoints)
       count = count +1
-    print self.temppoints
     return self.temppoints
