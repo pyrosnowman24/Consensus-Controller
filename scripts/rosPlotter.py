@@ -32,6 +32,9 @@ def robot4Callback(data):
     global plotter
     plotter.updateData([data.x,data.y,data.sensor])
     plotter.points[3,:] = np.array(([data.x,data.y]))
+def modelCallback(data):
+    global plotter
+    plotter.linModel = data.p
 
 def initialize():
     rospy.init_node('rosCloud', anonymous = True)
@@ -41,17 +44,19 @@ def initialize():
     rospy.Subscriber("/robot2/data",Data,robot2Callback,queue_size=1)
     rospy.Subscriber("/robot3/data",Data,robot3Callback,queue_size=1)
     rospy.Subscriber("/robot4/data",Data,robot4Callback,queue_size=1)
+    rospy.Subscriber("/edge/model",floatArray,modelCallback,queue_size=1)
 
     rate = rospy.Rate(5)
 
     while not rospy.is_shutdown():
         if count%10 == 0:
             print count,'\n'
-        if count%100 == 0:
+        if count%200 == 0:
             plotter.BoundedVoronoi.updateVoronoi(plotter.points)
             plotter.plotResults()
             count = count +1
         else:
+            plotter.updatePath()
             count = count+1
 
         rate.sleep()

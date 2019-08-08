@@ -18,17 +18,20 @@ class Cloud:
             return None
         grid_x,grid_y = np.mgrid[0:1:20j,0:1:20j]
         #RBF Method
-        RBFi = interp.Rbf(self.data[:,0],self.data[:,1],self.data[:,2], function='inverse', smooth=0)
+        RBFi = interp.Rbf(self.data[:,0],self.data[:,1],self.data[:,2], function='cubic', smooth=0)
         self.model = RBFi
 
     def updateData(self,data):
         if self.data is None:
             self.data = data
-        elif(len(self.data)>=300):
+            return None
+        if isinstance(self.data,list) is False:
             for row in self.data:
-                if list(row) == data:
-                    return None
-            self.data = np.delete(self.data,0,0)
+                for value in np.subtract(list(row),data):
+                    if value <= .0005 and value >= -.0005:
+                        return None
+        if(len(self.data)>=300):
+            # self.data = np.delete(self.data,0,0)
             self.data = np.vstack((self.data,data))
         else:
             self.data = np.vstack((self.data,data))

@@ -49,16 +49,24 @@ def initialize():
 
     while not rospy.is_shutdown():
         global points, count
+        # print points
+        # if BigC.data is not None:
+        #     print len(BigC.data)
         for point in points: # Tests if any of the robots positions hasent been recieved yet
             if point[0] == 0 or point[1] == 0:
                 print "~~~~~~~~~~~~PANIC~~~~~~~~~~~~~~~~"
                 rate.sleep()
-        if(BigC.data is not None and len(BigC.data) >= 200):
+        if(BigC.data is not None and len(BigC.data) >= 100):
             BigC.updateModel()
-            print count
             count = count + 1
             poses = BigC.findPositions(points).transpose()
-            print "Publishing model",'\n'
+            # print "Cloud Model:",'\n'
+            # print "x=.2,y=.2,z=",BigC.model(.2,.2)
+            # print "x=.75,y=.32,z=",BigC.model(.75,.32)
+            # print "x=.46,y=.78,z=",BigC.model(.46,.78)
+            # print "x=.45,y=.26,z=",BigC.model(.45,.26)
+            # print "x=.16,y=.52,z=",BigC.model(.16,.52)
+            print "Publishing model",count,'\n'
             desiredPoses.publish(list(poses[0,:]),list(poses[1,:]))
         else:
             print "Publishing 0",'\n'

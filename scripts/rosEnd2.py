@@ -19,11 +19,15 @@ global bigS,bounding_box,desiredPos,robot
 bigS = Sensor()
 bounding_box = np.array((0,1,0,1))
 desiredPos = [np.array([float('nan'),float('nan')])]
-robot = End(1,[.25,.75],bigS,time.time(),bounding_box)
+robot = End(1,[random.uniform(0,1),random.uniform(0,1)],bigS,time.time(),bounding_box)
 
 def posesCallback(data):
     global desiredPos
     desiredPos = np.array([data.x,data.y])
+    if np.isnan(np.sum(desiredPos)):
+        print "desired",desiredPos[:,0]
+    else:
+        print "desired",desiredPos[:,1]
 def modelCallback(data):
     robot.p = data.p
 def robot1Callback(data):
@@ -45,18 +49,19 @@ def initialize():
     rospy.Subscriber("/robot4/data",Data,robot4Callback,queue_size=1)
     # rospy.Subscriber("/robot/localization",Float64[],loalizationCallback,queue_size=1) # The subscription to the ouput localication value goes here
     data = rospy.Publisher("/robot2/data",Data,queue_size=1,latch = True)
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(10)
 
     data.publish(robot.pos[0],robot.pos[1],robot.Sensor.sensor(robot.pos))
 
     while not rospy.is_shutdown():
         robot.points[1,:] = robot.pos
+
         if np.isnan(np.sum(desiredPos)):
             robot.updateVoronoi()
             centroid = robot.computeCentroid()
             robot.updatePosition(centroid)
         else:
-            robot.pos = desiredPos[:,1]
+            robot.updatePosition(desiredPos[:,1])
         data.publish(robot.pos[0],robot.pos[1],robot.Sensor.sensor(robot.pos))
         rate.sleep()
 

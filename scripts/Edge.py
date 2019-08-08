@@ -11,6 +11,7 @@ class Edge:
     self.p0 = np.array([1,1,1])
 
   def linearApprox(self):
+  # https://math.stackexchange.com/questions/99299/best-fitting-plane-given-a-set-of-points
     for row in self.data:
         if np.sum(row) == 0:
             return None

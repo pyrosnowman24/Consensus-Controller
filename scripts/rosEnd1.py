@@ -19,11 +19,12 @@ global bigS,bounding_box,desiredPos,robot
 bigS = Sensor()
 bounding_box = np.array((0,1,0,1))
 desiredPos = [np.array([float('nan'),float('nan')])]
-robot = End(0,[.25,.25],bigS,time.time(),bounding_box)
+robot = End(0,[random.uniform(0,1),random.uniform(0,1)],bigS,time.time(),bounding_box)
 
 def posesCallback(data):
     global desiredPos
     desiredPos = np.array([data.x,data.y])
+    print "desired",desiredPos[:,0]
 def modelCallback(data):
     robot.p = data.p
 def robot2Callback(data):
@@ -45,20 +46,19 @@ def initialize():
     rospy.Subscriber("/robot4/data",Data,robot4Callback,queue_size=1)
     # rospy.Subscriber("/robot/localization",Float64[],loalizationCallback,queue_size=1) # The subscription to the ouput localication value goes here
     data = rospy.Publisher("/robot1/data",Data,queue_size=1,latch = True)
-    rate = rospy.Rate(20)
+    rate = rospy.Rate(10)
 
     data.publish(robot.pos[0],robot.pos[1],robot.Sensor.sensor(robot.pos))
 
     while not rospy.is_shutdown():
         robot.points[0,:] = robot.pos
+
         if np.isnan(np.sum(desiredPos)):
-            # print "Speed Layer Run on robot1"
             robot.updateVoronoi()
             centroid = robot.computeCentroid()
             robot.updatePosition(centroid)
         else:
-            # print "Batch Layer Run on robot1"
-            robot.pos = desiredPos[:,0]
+            robot.updatePosition(desiredPos[:,0])
         data.publish(robot.pos[0],robot.pos[1],robot.Sensor.sensor(robot.pos))
         rate.sleep()
 

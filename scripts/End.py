@@ -27,7 +27,7 @@ class End:
   def sensorHat(self,pos = None): #Provides a sensor value at a (x,y) coordinate
     if pos is None:
       pos = self.pos
-    sum = self.p[0]+(self.p[1]*pos[0]**3+self.p[2]*pos[1]**3)
+    sum = self.p[2]+(self.p[0]*pos[0]+self.p[1]*pos[1])
     if sum == 0:
         sum = np.array(.0001)
     return sum
