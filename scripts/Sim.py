@@ -71,13 +71,11 @@ class Sim:
         self.pos = point
         vertices = self.getVertices(self.pos)
         centroid = self.computeCentroid(vertices)
-        if count == amount-1:
-            print "Point",self.pos
-            print "Centroid",centroid
+        # if count == amount-1:
+        #     print "Point",self.pos
+        #     print "Centroid",centroid
         newpoints[i] = point + np.subtract(self.computeCentroid(vertices),point)*.3
         # newpoints[i] = centroid
-        if count == amount-1:
-            print newpoints
       self.temppoints = newpoints
       self.BoundedVoronoi.updateVoronoi(self.temppoints)
       count = count +1
