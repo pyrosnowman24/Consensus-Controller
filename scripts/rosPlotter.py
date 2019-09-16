@@ -16,34 +16,34 @@ VoronoiPlot = BoundedVoronoi(None,bounding_box)
 plotter = PlotData(VoronoiPlot,Sensor())
 count = 1
 
-def robot1Callback(data):
+def robot0Callback(data):
     global plotter
     plotter.updateData([data.x,data.y,data.sensor])
     plotter.points[0,:] = np.array(([data.x,data.y]))
-def robot2Callback(data):
+def robot1Callback(data):
     global plotter
     plotter.updateData([data.x,data.y,data.sensor])
     plotter.points[1,:] = np.array(([data.x,data.y]))
-def robot3Callback(data):
+def robot2Callback(data):
     global plotter
     plotter.updateData([data.x,data.y,data.sensor])
     plotter.points[2,:] = np.array(([data.x,data.y]))
-def robot4Callback(data):
+def robot3Callback(data):
     global plotter
     plotter.updateData([data.x,data.y,data.sensor])
     plotter.points[3,:] = np.array(([data.x,data.y]))
 def modelCallback(data):
     global plotter
-    plotter.linModel = data.p
+    plotter.linModel = data.floats
 
 def initialize():
     rospy.init_node('rosCloud', anonymous = True)
     global points, plotter, count
     # The combined sensor reading and position of the reading in one message from each robot
+    rospy.Subscriber("/robot0/data",Data,robot0Callback,queue_size=1)
     rospy.Subscriber("/robot1/data",Data,robot1Callback,queue_size=1)
     rospy.Subscriber("/robot2/data",Data,robot2Callback,queue_size=1)
     rospy.Subscriber("/robot3/data",Data,robot3Callback,queue_size=1)
-    rospy.Subscriber("/robot4/data",Data,robot4Callback,queue_size=1)
     rospy.Subscriber("/edge/model",floatArray,modelCallback,queue_size=1)
 
     rate = rospy.Rate(5)

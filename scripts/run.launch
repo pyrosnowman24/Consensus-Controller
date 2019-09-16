@@ -1,5 +1,5 @@
-<launch>
-  <!-- <machine name="local_alt" address="localhost" default="true" env-loader="/opt/ros/kinetic/env.sh" /> -->
+
+<!-- <launch>
   <param name ="/use_sim_time" value="false"/>
   <node name="edge1" pkg="Sensor_Dist_ROS" type="rosEdge.py" output="screen" launch-prefix="xterm -T edge -hold -e"/>
   <node name="cloud9" pkg="Sensor_Dist_ROS" type="rosCloud.py" output="screen" launch-prefix="xterm -T cloud -hold -e"/>
@@ -9,5 +9,26 @@
     <node name="robot2" pkg="Sensor_Dist_ROS" type="rosEnd2.py" output="screen" launch-prefix="xterm -T robot2 -hold -e"/>
     <node name="robot3" pkg="Sensor_Dist_ROS" type="rosEnd3.py" output="screen" launch-prefix="xterm -T robot3 -hold -e"/>
     <node name="robot4" pkg="Sensor_Dist_ROS" type="rosEnd4.py" output="screen" launch-prefix="xterm -T robot4 -hold -e"/>
+  </group>
+</launch> -->
+
+<launch>
+  <param name ="/use_sim_time" value="false"/>
+  <node name="edge1" pkg="Sensor_Dist_ROS" type="rosEdge.py" output="screen" launch-prefix="xterm -T edge -hold -e"/>
+  <node name="cloud9" pkg="Sensor_Dist_ROS" type="rosCloud.py" output="screen" launch-prefix="xterm -T cloud -hold -e"/>
+  <node name="plotter1" pkg="Sensor_Dist_ROS" type="rosPlotter.py" output="screen" launch-prefix="xterm -T plotter -hold -e"/>
+  <group>
+    <node name="robot1" pkg="Sensor_Dist_ROS" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot1 -hold -e">
+      <param name="id" type="int" value="0" />
+    </node>
+    <node name="robot2" pkg="Sensor_Dist_ROS" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot2 -hold -e">
+      <param name="id" type="int" value="1" />
+    </node>
+    <node name="robot3" pkg="Sensor_Dist_ROS" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot3 -hold -e">
+      <param name="id" type="int" value="2" />
+    </node>
+    <node name="robot4" pkg="Sensor_Dist_ROS" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot4 -hold -e">
+      <param name="id" type="int" value="3" />
+    </node>
   </group>
 </launch>

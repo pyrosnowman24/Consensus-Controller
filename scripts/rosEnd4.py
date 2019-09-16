@@ -29,7 +29,10 @@ def posesCallback(data):
     else:
         print "desired",desiredPos[:,3]
 def modelCallback(data):
-    robot.p = data.p
+    if data.floats is None:
+        return None
+    else:
+        robot.p = data.floats
 def robot1Callback(data):
     robot.points[0,:] = [data.x,data.y]
 def robot2Callback(data):

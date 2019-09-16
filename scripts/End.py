@@ -2,6 +2,9 @@
 import numpy as np
 import rospy
 import time
+import math
+import tf2_ros
+import geometry_msgs.msg
 from scipy.spatial import Voronoi, voronoi_plot_2d
 import sys
 from skmonaco import mcquad, mcmiser
@@ -33,10 +36,16 @@ class End:
     return sum
 
   def updatePosition(self,centroid):
+    # Old Method for simple simulation
     control = self.K * np.subtract(centroid,self.pos)
     self.pos = self.pos + (time.time() - self.prevTime) * .5 * (self.prevControl+control)
     self.prevTime = rospy.get_time()
     self.prevControl = control
+    # New method for gazebo turtlebots
+    # msg = geometry_msgs.msg.Twist()
+    # msg.angular.z = 4 * math.atan2(trans.transform.translation.y, trans.transform.translation.x)
+    # msg.linear.x = 0.5 * math.sqrt(trans.transform.translation.x ** 2 + trans.transform.translation.y ** 2)
+    # return msg
 
   def computeCentroid(self):
     xmin = 10000

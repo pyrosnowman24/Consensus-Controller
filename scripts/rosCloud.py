@@ -19,19 +19,19 @@ points = np.zeros((4,2))
 BigC = Cloud(sim)
 count = 0
 
-def robot1Callback(data):
+def robot0Callback(data):
     global points,BigC
     BigC.updateData([data.x,data.y,data.sensor])
     points[0,:] = np.array(([data.x,data.y]))
-def robot2Callback(data):
+def robot1Callback(data):
     global points,BigC
     BigC.updateData([data.x,data.y,data.sensor])
     points[1,:] = np.array(([data.x,data.y]))
-def robot3Callback(data):
+def robot2Callback(data):
     global points,BigC
     BigC.updateData([data.x,data.y,data.sensor])
     points[2,:] = np.array(([data.x,data.y]))
-def robot4Callback(data):
+def robot3Callback(data):
     global points,BigC
     BigC.updateData([data.x,data.y,data.sensor])
     points[3,:] = np.array(([data.x,data.y]))
@@ -39,16 +39,17 @@ def robot4Callback(data):
 def initialize():
     rospy.init_node('rosCloud', anonymous = True)
     # The combined sensor reading and position of the reading in one message from each robot
+    rospy.Subscriber("/robot0/data",Data,robot0Callback,queue_size=1)
     rospy.Subscriber("/robot1/data",Data,robot1Callback,queue_size=1)
     rospy.Subscriber("/robot2/data",Data,robot2Callback,queue_size=1)
     rospy.Subscriber("/robot3/data",Data,robot3Callback,queue_size=1)
-    rospy.Subscriber("/robot4/data",Data,robot4Callback,queue_size=1)
     # The published array of robot positions and the array of values for the model
     desiredPoses = rospy.Publisher("/cloud/poses",floatArray2,queue_size=1)
     rate = rospy.Rate(5)
 
     while not rospy.is_shutdown():
         global points, count
+        print points
         # print points
         # if BigC.data is not None:
         #     print len(BigC.data)

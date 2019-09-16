@@ -24,9 +24,15 @@ robot = End(0,[random.uniform(0,1),random.uniform(0,1)],bigS,time.time(),boundin
 def posesCallback(data):
     global desiredPos
     desiredPos = np.array([data.x,data.y])
-    print "desired",desiredPos[:,0]
+    if np.isnan(np.sum(desiredPos)):
+        print "desired",desiredPos[:,0]
+    else:
+        print "desired",desiredPos[:,1]
 def modelCallback(data):
-    robot.p = data.p
+    if data.floats is None:
+        return None
+    else:
+        robot.p = data.floats
 def robot2Callback(data):
     robot.points[1,:] = [data.x,data.y]
 def robot3Callback(data):
