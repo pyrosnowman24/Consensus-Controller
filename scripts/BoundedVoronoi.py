@@ -102,6 +102,6 @@ class BoundedVoronoi:
 #           centroid = self.centroid_region(vertices)
 #           centroids.append(list(centroid[0, :]))
 #           ax.plot(centroid[:, 0], centroid[:, 1], 'r.')
-      ax.set_xlim([-0.1, 1.1])
-      ax.set_ylim([-0.1, 1.1])
+      ax.set_xlim([bounding_box[0]-0.1, bounding_box[1]+1.1])
+      ax.set_ylim([bounding_box[2]-0.1, bounding_box[3]+1.1])
       # plt.show()

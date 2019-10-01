@@ -14,7 +14,6 @@ class Cloud:
 
     def updateModel(self):
         if self.data is None or isinstance(self.data,list):
-            print(self.data)
             return None
         grid_x,grid_y = np.mgrid[0:1:20j,0:1:20j]
         #RBF Method

@@ -13,6 +13,7 @@ class PlotData:
         self.points = np.zeros((4,2))
         self.data = None
         self.BoundedVoronoi = BoundedVoronoi
+        self.bounding_box = BoundedVoronoi.bounding_box
         self.SensorFunc = SensorFunc
         self.linModel = None
         self.path = None
@@ -22,15 +23,15 @@ class PlotData:
       # return self.p[0] + self.p[1]*(x[0]+self.p[2])**2+self.p[3]*(x[1]+self.p[4])**2
       print("")
     def plotResults(self):
-        grid_x,grid_y = np.mgrid[0:1:200j,0:1:200j]
+        grid_x,grid_y = np.mgrid[self.bounding_box[0]:self.bounding_box[1]:200j,self.bounding_box[2]:self.bounding_box[3]:200j]
         #RBF Method
         # grid_x2,grid_y2 = np.mgrid[-5:5:20j,-5:5:20j]
         RBFi = interp.Rbf(self.data[:,0],self.data[:,1],self.data[:,2], function='cubic', smooth=0)
         # re-grid the data to fit the entire graph
         zi = RBFi(grid_x, grid_y)
         n = 100
-        X = np.linspace(0,1,n)
-        Y = X
+        X = np.linspace(self.bounding_box[0],self.bounding_box[1],n)
+        Y = np.linspace(self.bounding_box[2],self.bounding_box[3],n)
         X,Y = np.meshgrid(X,Y)
         Z1 = np.zeros((n,n))
         Z2 = np.zeros((n,n))
@@ -39,18 +40,18 @@ class PlotData:
             Z1[x][y] = self.linModel[0]*X[x,y]+self.linModel[1]*Y[x,y]+self.linModel[2]
             Z2[x][y] = self.SensorFunc.sensor([X[x,y],Y[x,y]])
 
-        print "Model:",'\n'
-        print "x=.2,y=.2,z=",RBFi(.2,.2)
-        print "x=.75,y=.32,z=",RBFi(.75,.32)
-        print "x=.46,y=.78,z=",RBFi(.46,.78)
-        print "x=.45,y=.26,z=",RBFi(.45,.26)
-        print "x=.16,y=.52,z=",RBFi(.16,.52)
-        print "Actual:",'\n'
-        print "x=.2,y=.2,z=",self.SensorFunc.sensor([.2,.2])
-        print "x=.75,y=.32,z=",self.SensorFunc.sensor([.75,.32])
-        print "x=.46,y=.78,z=",self.SensorFunc.sensor([.46,.78])
-        print "x=.45,y=.26,z=",self.SensorFunc.sensor([.45,.26])
-        print "x=.16,y=.52,z=",self.SensorFunc.sensor([.16,.52])
+        # print "Model:",'\n'
+        # print "x=.2,y=.2,z=",RBFi(.2,.2)
+        # print "x=.75,y=.32,z=",RBFi(.75,.32)
+        # print "x=.46,y=.78,z=",RBFi(.46,.78)
+        # print "x=.45,y=.26,z=",RBFi(.45,.26)
+        # print "x=.16,y=.52,z=",RBFi(.16,.52)
+        # print "Actual:",'\n'
+        # print "x=.2,y=.2,z=",self.SensorFunc.sensor([.2,.2])
+        # print "x=.75,y=.32,z=",self.SensorFunc.sensor([.75,.32])
+        # print "x=.46,y=.78,z=",self.SensorFunc.sensor([.46,.78])
+        # print "x=.45,y=.26,z=",self.SensorFunc.sensor([.45,.26])
+        # print "x=.16,y=.52,z=",self.SensorFunc.sensor([.16,.52])
 
 
         fig,(ax1,ax2) = plt.subplots(1,2,figsize=(10,10))
@@ -60,8 +61,8 @@ class PlotData:
         for region in self.BoundedVoronoi.vor.filtered_regions:
             vertices = self.BoundedVoronoi.vor.vertices[region + [region[0]], :]
             ax1.plot(vertices[:, 0], vertices[:, 1], 'k-')
-        ax1.set_xlim([0, 1])
-        ax1.set_ylim([0,1])
+        ax1.set_xlim([self.bounding_box[0],self.bounding_box[1]])
+        ax1.set_ylim(self.bounding_box[2],self.bounding_box[3])
         cf2 = ax2.contour(X, Y, Z2, 30,vmax = zi.max(), vmin = zi.min(), linewidths=0.5, colors='k')
         cf2 = ax2.contourf(X, Y, Z2, 50,vmax = zi.max(), vmin = zi.min(), cmap=plt.cm.rainbow)
         fig.colorbar(cf1)  # draw colorbar
@@ -69,8 +70,8 @@ class PlotData:
         for region in self.BoundedVoronoi.vor.filtered_regions:
             vertices = self.BoundedVoronoi.vor.vertices[region + [region[0]], :]
             ax2.plot(vertices[:, 0], vertices[:, 1], 'k-')
-        ax2.set_xlim([0, 1])
-        ax2.set_ylim([0,1])
+        ax2.set_xlim(self.bounding_box[0],self.bounding_box[1])
+        ax2.set_ylim(self.bounding_box[2],self.bounding_box[3])
         # # Surface plot of RBF estimation vs real sensor function
         # # Plots RBF model of sensor function
         # fig = plt.figure(figsize=plt.figaspect(.5))

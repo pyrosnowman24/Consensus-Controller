@@ -11,7 +11,7 @@ from Plotter import PlotData
 from Sensor import Sensor
 
 global bigS,bounding_box,simVoronoi,sim,points,BigC
-bounding_box = np.array([0,1,0,1])
+bounding_box = np.array([0,10,0,10])
 VoronoiPlot = BoundedVoronoi(None,bounding_box)
 plotter = PlotData(VoronoiPlot,Sensor())
 count = 1
@@ -46,7 +46,7 @@ def initialize():
     rospy.Subscriber("/robot3/data",Data,robot3Callback,queue_size=1)
     rospy.Subscriber("/edge/model",floatArray,modelCallback,queue_size=1)
 
-    rate = rospy.Rate(5)
+    rate = rospy.Rate(10)
 
     while not rospy.is_shutdown():
         if count%10 == 0:

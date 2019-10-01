@@ -12,7 +12,7 @@ from Sim import Sim
 from BoundedVoronoi import BoundedVoronoi
 
 global bigS,bounding_box,simVoronoi,sim,points,BigC
-bounding_box = np.array([0,1,0,1])
+bounding_box = np.array([0,10,0,10])
 simVoronoi = BoundedVoronoi(None,bounding_box)
 sim = Sim(simVoronoi)
 points = np.zeros((4,2))
@@ -49,7 +49,6 @@ def initialize():
 
     while not rospy.is_shutdown():
         global points, count
-        print points
         # print points
         # if BigC.data is not None:
         #     print len(BigC.data)
@@ -58,20 +57,15 @@ def initialize():
                 print "~~~~~~~~~~~~PANIC~~~~~~~~~~~~~~~~"
                 rate.sleep()
         if(BigC.data is not None and len(BigC.data) >= 100):
+            print "Publishing model",count,'\n'
             BigC.updateModel()
             count = count + 1
+            print "points",points
             poses = BigC.findPositions(points).transpose()
-            # print "Cloud Model:",'\n'
-            # print "x=.2,y=.2,z=",BigC.model(.2,.2)
-            # print "x=.75,y=.32,z=",BigC.model(.75,.32)
-            # print "x=.46,y=.78,z=",BigC.model(.46,.78)
-            # print "x=.45,y=.26,z=",BigC.model(.45,.26)
-            # print "x=.16,y=.52,z=",BigC.model(.16,.52)
-            print "Publishing model",count,'\n'
+            print "poses",poses
             desiredPoses.publish(list(poses[0,:]),list(poses[1,:]))
         else:
             print "Publishing 0",'\n'
-            desiredPoses.publish([float('nan')],[float('nan')])
         rate.sleep()
 
 if __name__ == '__main__':

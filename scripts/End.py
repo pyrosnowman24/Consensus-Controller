@@ -1,13 +1,13 @@
 #!/usr/bin/python
 import numpy as np
 import rospy
-import time
 import math
 import tf2_ros
 import geometry_msgs.msg
 from scipy.spatial import Voronoi, voronoi_plot_2d
 import sys
 from skmonaco import mcquad, mcmiser
+import turtlesim.srv
 
 class End:
   def __init__(self,index,pos,Sensor,startTime,bounding_box):
@@ -38,7 +38,7 @@ class End:
   def updatePosition(self,centroid):
     # Old Method for simple simulation
     control = self.K * np.subtract(centroid,self.pos)
-    self.pos = self.pos + (time.time() - self.prevTime) * .5 * (self.prevControl+control)
+    self.pos = self.pos + (rospy.get_time() - self.prevTime) * .5 * (self.prevControl+control)
     self.prevTime = rospy.get_time()
     self.prevControl = control
     # New method for gazebo turtlebots
