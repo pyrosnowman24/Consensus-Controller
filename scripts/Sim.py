@@ -61,22 +61,26 @@ class Sim:
     return np.array([value,xyvalue[0],xyvalue[1]])
 
   def run(self):
+    startTime = rospy.get_time()
+    print "Starting simulation"
     self.temppoints = self.points
     newpoints = np.zeros((4,2))
     self.BoundedVoronoi.updateVoronoi(self.temppoints)
     count = 0
     amount = 25
     while count < amount:
+      # print "Iteration",count,"ellapsed time",rospy.get_time() - startTime
+      # print "Curent points:",'\n',self.temppoints
       for i,point in enumerate(self.temppoints):
         self.pos = point
         vertices = self.getVertices(self.pos)
         centroid = self.computeCentroid(vertices)
-        # if count == amount-1:
-        #     print "Point",self.pos
-        #     print "Centroid",centroid
-        newpoints[i] = point + np.subtract(self.computeCentroid(vertices),point)*.3
-        # newpoints[i] = centroid
-      self.temppoints = newpoints
+        newpoints[i] = point + np.subtract(centroid,point)*.3
+      if np.less(np.absolute(np.subtract(self.temppoints,newpoints)),.2).all(): # the .2 is used to determine the threshold for equilibrium
+          self.temppoints = newpoints+0 # zero forces a new memory value for self.tempoints, otherwise itll change values with newpoints
+          count = amount
+      else:
+          self.temppoints = newpoints+0
+          count = count +1
       self.BoundedVoronoi.updateVoronoi(self.temppoints)
-      count = count +1
     return self.temppoints
