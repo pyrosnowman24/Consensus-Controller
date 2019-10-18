@@ -9,11 +9,12 @@ from matplotlib import cm
 import scipy.interpolate as interp
 
 class PlotData:
-    def __init__(self,BoundedVoronoi,SensorFunc):
+    def __init__(self,BoundedVoronoi,SensorFunc,soft_bounding_box):
         self.points = np.zeros((4,2))
         self.data = None
         self.BoundedVoronoi = BoundedVoronoi
         self.bounding_box = BoundedVoronoi.bounding_box
+        self.soft_bounding_box = soft_bounding_box
         self.SensorFunc = SensorFunc
         self.linModel = None
         self.path = None
@@ -22,6 +23,45 @@ class PlotData:
     def fitfunc1(self,x):
       # return self.p[0] + self.p[1]*(x[0]+self.p[2])**2+self.p[3]*(x[1]+self.p[4])**2
       print("")
+    def sensor_Pre_Processing(self,sensor_value,pos): # Adjusts the sensor values to add a cost to being outide the desired region
+      scale = lambda x1,x2 : 20/(x2-x1+.001) # .001 prevents undefined at x2-x1 = 0
+      cost = lambda pos,s,bound : 1/(1+np.exp(s*pos-4-s*bound)) # Calculates cost for position
+      if (pos[0]<self.soft_bounding_box[0]):
+        # Position is outside negative x of box
+        s_x = scale(self.soft_bounding_box[0],self.bounding_box[0])
+        x_bound = self.soft_bounding_box[0]
+        if self.soft_bounding_box[0] == self.bounding_box[0]:
+          s_x = 0
+      elif (pos[0]>self.soft_bounding_box[1]):
+        # Position is outisde positive part of box
+        s_x = scale(self.soft_bounding_box[1],self.bounding_box[1])
+        x_bound = self.soft_bounding_box[1]
+        if self.soft_bounding_box[1] == self.bounding_box[1]:
+          s_x = 0
+      else:
+        s_x = 0
+        x_bound = 0
+
+      if (pos[1]<self.soft_bounding_box[2]):
+        # Position is outide negative y of box
+        s_y = scale(self.soft_bounding_box[2],self.bounding_box[2])
+        y_bound = self.soft_bounding_box[2]
+        if self.soft_bounding_box[2] == self.bounding_box[2]:
+          s_y = 0
+      elif (pos[1]>self.soft_bounding_box[3]):
+        # Position is outisde positive y of box
+        s_y = scale(self.soft_bounding_box[3],self.bounding_box[3])
+        y_bound = self.soft_bounding_box[3]
+        if self.soft_bounding_box[3] == self.bounding_box[3]:
+          s_y = 0
+      else:
+        # Position is inside box
+        s_y = 0
+        y_bound = 0
+      #     print("pos_x:",pos[0],"s_x:",s_x,"x_bound:",x_bound,"Cost_x:",cost(pos[0],s_x,x_bound))
+      #     print("pos_y:",pos[1],"s_y:",s_y,"y_bound:",y_bound,"Cost_y:",cost(pos[1],s_y,y_bound))
+      #     print("cost_x:",cost(pos[0],s_x,x_bound),"cost_y:",cost(pos[1],s_y,y_bound),"combined cost:",cost(pos[0],s_x,x_bound)*cost(pos[1],s_y,y_bound))
+      return sensor_value *cost(pos[1],s_y,y_bound)*cost(pos[0],s_x,x_bound)
     def plotResults(self):
         grid_x,grid_y = np.mgrid[self.bounding_box[0]:self.bounding_box[1]:200j,self.bounding_box[2]:self.bounding_box[3]:200j]
         #RBF Method
@@ -38,7 +78,7 @@ class PlotData:
         for x in range(len(X)):
           for y in range(len(Y)):
             Z1[x][y] = self.linModel[0]*X[x,y]+self.linModel[1]*Y[x,y]+self.linModel[2]
-            Z2[x][y] = self.SensorFunc.sensor([X[x,y],Y[x,y]])
+            Z2[x][y] = self.sensor_Pre_Processing(self.SensorFunc.sensor([X[x,y],Y[x,y]]),[X[x,y],Y[x,y]])
 
         # print "Model:",'\n'
         # print "x=.2,y=.2,z=",RBFi(.2,.2)

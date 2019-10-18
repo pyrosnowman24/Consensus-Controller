@@ -35,18 +35,6 @@ class End:
         sum = np.array(.0001)
     return sum
 
-  def updatePosition(self,centroid):
-    # Old Method for simple simulation
-    control = self.K * np.subtract(centroid,self.pos)
-    self.pos = self.pos + (rospy.get_time() - self.prevTime) * .5 * (self.prevControl+control)
-    self.prevTime = rospy.get_time()
-    self.prevControl = control
-    # New method for gazebo turtlebots
-    # msg = geometry_msgs.msg.Twist()
-    # msg.angular.z = 4 * math.atan2(trans.transform.translation.y, trans.transform.translation.x)
-    # msg.linear.x = 0.5 * math.sqrt(trans.transform.translation.x ** 2 + trans.transform.translation.y ** 2)
-    # return msg
-
   def computeCentroid(self):
     xmin = 10000
     xmax = -10000

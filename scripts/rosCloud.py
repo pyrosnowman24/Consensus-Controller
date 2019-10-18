@@ -13,8 +13,9 @@ from BoundedVoronoi import BoundedVoronoi
 
 global bigS,bounding_box,simVoronoi,sim,points,BigC
 bounding_box = np.array([0,10,0,10])
+soft_bounding_box = np.array([0,10,0,10])
 simVoronoi = BoundedVoronoi(None,bounding_box)
-sim = Sim(simVoronoi)
+sim = Sim(simVoronoi,bounding_box,soft_bounding_box)
 points = np.zeros((4,2))
 BigC = Cloud(sim)
 count = 0

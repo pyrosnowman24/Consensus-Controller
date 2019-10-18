@@ -72,7 +72,7 @@ def broadcast_locations(): # Responisble for publishing the transform between ea
     t.transform.rotation.y = pose.orientation.y
     t.transform.rotation.z = pose.orientation.z
     t.transform.rotation.w = pose.orientation.w
-    # print "x=",pose.position.x,"y=",pose.position.y,"z=",pose.position.z
+    # print "transform_pos_x=",pose.position.x,"transform_pos_y=",pose.position.y,"transform_pos_z=",pose.position.z
     br.sendTransform(t)
 def broadcast_desired_pos():
     global desired_position
@@ -86,7 +86,7 @@ def broadcast_desired_pos():
     t.child_frame_id = "robot"+str(id)+"/desired_position"
     t.transform.translation.x = desired_position[0]
     t.transform.translation.y = desired_position[1]
-    # print "x=",desired_position[0],"y=",desired_position[1]
+    # print "transform_desired_x=",desired_position[0],"transform_desired_y=",desired_position[1]
     t.transform.translation.z = 0.0
     t.transform.rotation.x = 0
     t.transform.rotation.y = 0
@@ -153,8 +153,8 @@ def initialize():
                 desired_position = centroid
             else: # Runs if the cloud has sent a desired position
                 print "Batch Layer"
-                # robot.updatePosition(desired_position)
-                print robot.pos
+                print "Position:",robot.pos
+                print "Desired:",desired_position
             if not np.isnan(np.sum(desired_position)):
                 broadcast_desired_pos()
             if not np.isnan(np.sum(desired_position)):

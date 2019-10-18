@@ -12,8 +12,9 @@ from Sensor import Sensor
 
 global bigS,bounding_box,simVoronoi,sim,points,BigC
 bounding_box = np.array([0,10,0,10])
+soft_bounding_box = np.array([0,10,0,10])
 VoronoiPlot = BoundedVoronoi(None,bounding_box)
-plotter = PlotData(VoronoiPlot,Sensor())
+plotter = PlotData(VoronoiPlot,Sensor(),soft_bounding_box)
 count = 1
 
 def robot0Callback(data):
