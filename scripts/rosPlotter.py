@@ -3,8 +3,8 @@ import rospy
 import std_msgs
 import numpy as np
 from std_msgs.msg import String,Float64
-from Sensor_Dist_ROS.msg import floatArray as floatArray
-from Sensor_Dist_ROS.msg import sens as Data
+from sensor_dist_ros.msg import floatArray as floatArray
+from sensor_dist_ros.msg import sens as Data
 from Sim import Sim
 from BoundedVoronoi import BoundedVoronoi
 from Plotter import PlotData
