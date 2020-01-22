@@ -3,8 +3,8 @@ import rospy
 import std_msgs
 from std_msgs.msg import Float64
 from geometry_msgs.msg import PoseArray,Pose
-from Sensor_Dist_ROS.msg import sens as Data
-from Sensor_Dist_ROS.msg import floatArray as floatArray
+from sensor_dist_ros.msg import sens as Data
+from sensor_dist_ros.msg import floatArray as floatArray
 import turtlesim
 from Edge import Edge
 

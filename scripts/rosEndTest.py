@@ -9,9 +9,9 @@ import tf2_ros
 from std_msgs.msg import Float64
 from geometry_msgs.msg import Pose, PoseArray, TransformStamped, Twist
 from gazebo_msgs.msg import ModelStates
-from Sensor_Dist_ROS.msg import sens as Data
-from Sensor_Dist_ROS.msg import floatArray as floatArray
-from Sensor_Dist_ROS.msg import floatArray2 as floatArray2
+from sensor_dist_ros.msg import sens as Data
+from sensor_dist_ros.msg import floatArray as floatArray
+from sensor_dist_ros.msg import floatArray2 as floatArray2
 import turtlesim
 from End import End
 from Sensor import Sensor
