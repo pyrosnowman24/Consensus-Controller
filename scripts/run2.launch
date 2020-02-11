@@ -1,7 +1,18 @@
 <launch>
   <param name ="/use_sim_time" value="false"/>
-  <!-- <include file="$(find sensor_dist_ros)/scripts/launch_gazebo.launch"/> -->
-  <node name="edge1" pkg="sensor_dist_ros" type="rosEdge.py" output="screen" launch-prefix="xterm -T edge -hold -e"/>
-  <node name="cloud9" pkg="sensor_dist_ros" type="rosCloud.py" output="screen" launch-prefix="xterm -T cloud -hold -e"/>
-  <node name="plotter1" pkg="sensor_dist_ros" type="rosPlotter.py" output="screen" launch-prefix="xterm -T plotter -hold -e"/>
+  <include file="$(find sensor_dist_ros)/scripts/launch_gazebo.launch"/>
+  <group>
+    <node name="robot0" pkg="sensor_dist_ros" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot0 -hold -e">
+      <param name="id" type="int" value="0" />
+    </node>
+    <node name="robot1" pkg="sensor_dist_ros" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot1 -hold -e">
+      <param name="id" type="int" value="1" />
+    </node>
+    <node name="robot2" pkg="sensor_dist_ros" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot2 -hold -e">
+      <param name="id" type="int" value="2" />
+    </node>
+    <node name="robot3" pkg="sensor_dist_ros" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot3 -hold -e">
+      <param name="id" type="int" value="3" />
+    </node>
+  </group>
 </launch>
