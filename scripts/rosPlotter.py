@@ -45,7 +45,7 @@ def initialize():
     rospy.Subscriber("/robot1/data",Data,robot1Callback,queue_size=1)
     rospy.Subscriber("/robot2/data",Data,robot2Callback,queue_size=1)
     rospy.Subscriber("/robot3/data",Data,robot3Callback,queue_size=1)
-    rospy.Subscriber("/edge/model",floatArray,modelCallback,queue_size=1)
+    # rospy.Subscriber("/edge/model",floatArray,modelCallback,queue_size=1)
 
     rate = rospy.Rate(10)
 
