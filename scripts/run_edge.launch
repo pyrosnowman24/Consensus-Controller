@@ -1,0 +1,8 @@
+<launch>
+  <param name ="/use_sim_time" value="false"/>
+  <node name="edge_receiver" pkg="sensor_dist_ros" type="edgeReceiver.py" output="screen" launch-prefix="xterm -T edge_receiver -hold -e"/>
+  <rosparam file="$(find sensor_dist_ros)/scripts/config.yaml" command="load"/>
+
+  <node name="edge1" pkg="sensor_dist_ros" type="rosEdgeRabbitMQ.py" output="screen" launch-prefix="xterm -T edge -hold -e"/>
+  <rosparam file="$(find sensor_dist_ros)/scripts/config.yaml" command="load"/>
+</launch>

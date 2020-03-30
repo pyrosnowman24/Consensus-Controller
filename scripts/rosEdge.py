@@ -5,7 +5,6 @@ from std_msgs.msg import Float64
 from geometry_msgs.msg import PoseArray,Pose
 from sensor_dist_ros.msg import sens as Data
 from sensor_dist_ros.msg import floatArray as floatArray
-import turtlesim
 from Edge import Edge
 
 global router

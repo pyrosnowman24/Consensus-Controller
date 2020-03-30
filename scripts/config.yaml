@@ -1,0 +1,9 @@
+hostname: 18.223.247.29
+username: admin
+password: password
+port: 5672
+mysql_hostname: 192.168.1.102
+mysql_username: lambda
+mysql_password: test5243
+mysql_database: lambda
+mysql_port: 3306

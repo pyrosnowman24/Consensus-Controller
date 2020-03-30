@@ -1,0 +1,7 @@
+<launch>
+<param name ="/use_sim_time" value="false"/>
+<node name="cloud_receiver" pkg="sensor_dist_ros" type="cloudReceiver.py" output="screen" launch-prefix="xterm -T cloud_receiver -hold -e"/>
+<rosparam file="$(find sensor_dist_ros)/scripts/config.yaml" command="load"/>
+<node name="cloud9" pkg="sensor_dist_ros" type="rosCloudRabbitMQ.py" output="screen" launch-prefix="xterm -T cloud_9 -hold -e"/>
+<rosparam file="$(find sensor_dist_ros)/scripts/config.yaml" command="load"/>
+</launch>

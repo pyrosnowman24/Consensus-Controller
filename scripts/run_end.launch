@@ -1,7 +1,6 @@
 <launch>
   <param name ="/use_sim_time" value="false"/>
   <include file="$(find sensor_dist_ros)/scripts/launch_gazebo.launch"/>
-  <group>
     <node name="robot0" pkg="sensor_dist_ros" type="rosEndTest.py" output="screen" launch-prefix="xterm -T robot0 -hold -e">
       <param name="id" type="int" value="0" />
     </node>

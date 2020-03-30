@@ -12,7 +12,6 @@ from gazebo_msgs.msg import ModelStates
 from sensor_dist_ros.msg import sens as Data
 from sensor_dist_ros.msg import floatArray as floatArray
 from sensor_dist_ros.msg import floatArray2 as floatArray2
-import turtlesim
 from End import End
 from Sensor import Sensor
 
